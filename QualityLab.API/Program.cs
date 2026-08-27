@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -32,10 +34,10 @@ builder.Services.AddScoped<ICertificadoService, CertificadoService>();
 // 4) Autenticación JWT ("¿Cómo se autenticó?")
 // ---------------------------------------------------------------------
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = false; // en producción: true
@@ -49,7 +51,11 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = jwtSettings.Issuer,
             ValidAudience = jwtSettings.Audience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-            ClockSkew = TimeSpan.FromMinutes(1)
+            ClockSkew = TimeSpan.FromMinutes(1),
+
+            // Permite que [Authorize(Roles = "ADMIN")] mapee correctamente los roles del token
+            RoleClaimType = ClaimTypes.Role,
+            NameClaimType = ClaimTypes.Name
         };
     });
 
@@ -60,8 +66,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // ---------------------------------------------------------------------
-// 5) CORS: permite que la app Web (MVC) y, en desarrollo, cualquier
-//    origen local llamen a la API. Ajustar en producción a dominios reales.
+// 5) CORS: permite comunicación de la Web (MVC), WinForms y Mobile.
 // ---------------------------------------------------------------------
 builder.Services.AddCors(options =>
 {
@@ -69,14 +74,20 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyHeader()
               .AllowAnyMethod()
-              .SetIsOriginAllowed(_ => true); // en producción: WithOrigins("https://miapp.com")
+              .SetIsOriginAllowed(_ => true);
     });
 });
 
 // ---------------------------------------------------------------------
-// 6) Controladores + Swagger (con soporte de Bearer token)
+// 6) Controladores + JsonStringEnumConverter (Acepta "ADMIN", "TECNICO", etc.)
 // ---------------------------------------------------------------------
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Permite recibir y responder enums como texto ("ADMIN") o como número (0)
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -129,7 +140,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "QualityLab API v1"));
 }
 
-// Middleware propio: manejo de excepciones primero, luego trazabilidad.
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RequestTrackingMiddleware>();
 
@@ -141,8 +151,6 @@ app.UseAuthorization();  // ¿Qué puedes hacer?
 
 app.MapControllers();
 
-// Endpoint simple de salud, útil para que WinForms/MAUI verifiquen conectividad
-// antes de decidir si trabajan en modo offline (Prueba 7 - Pérdida de conexión).
 app.MapGet("/api/health", () => Results.Ok(new { status = "OK", servidor = "QualityLab.API", hora = DateTime.UtcNow }))
    .AllowAnonymous();
 
