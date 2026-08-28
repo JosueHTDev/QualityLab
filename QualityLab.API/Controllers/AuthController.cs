@@ -64,11 +64,25 @@ namespace QualityLab.API.Controllers
             if (await _context.Usuarios.AnyAsync(u => u.NombreUsuario == dto.NombreUsuario))
                 return Conflict(new { mensaje = "El nombre de usuario ya existe." });
 
-            if (dto.Rol == RolUsuario.CLIENTE && dto.ClienteId is null)
-                return BadRequest(new { mensaje = "ClienteId es requerido para el rol CLIENTE." });
+            if (dto.Rol == RolUsuario.CLIENTE)
+            {
+                if (dto.ClienteId is null)
+                    return BadRequest(new { mensaje = "ClienteId es requerido para el rol CLIENTE." });
 
-            if (dto.Rol == RolUsuario.TECNICO && dto.TecnicoId is null)
-                return BadRequest(new { mensaje = "TecnicoId es requerido para el rol TECNICO." });
+                bool existeCliente = await _context.Clientes.AnyAsync(c => c.Id == dto.ClienteId);
+                if (!existeCliente)
+                    return BadRequest(new { mensaje = $"El ClienteId {dto.ClienteId} no existe en la base de datos." });
+            }
+
+            if (dto.Rol == RolUsuario.TECNICO)
+            {
+                if (dto.TecnicoId is null)
+                    return BadRequest(new { mensaje = "TecnicoId es requerido para el rol TECNICO." });
+
+                bool existeTecnico = await _context.Tecnicos.AnyAsync(t => t.Id == dto.TecnicoId);
+                if (!existeTecnico)
+                    return BadRequest(new { mensaje = $"El TecnicoId {dto.TecnicoId} no existe en la base de datos." });
+            }
 
             var usuario = new Usuario
             {
@@ -76,14 +90,21 @@ namespace QualityLab.API.Controllers
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 Rol = dto.Rol,
-                ClienteId = dto.ClienteId,
-                TecnicoId = dto.TecnicoId
+                ClienteId = (dto.Rol == RolUsuario.CLIENTE) ? dto.ClienteId : null,
+                TecnicoId = (dto.Rol == RolUsuario.TECNICO) ? dto.TecnicoId : null,
+                Activo = true
             };
 
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Login), new { }, new { mensaje = "Usuario creado correctamente.", usuario.Id });
+            return Ok(new
+            {
+                mensaje = "Usuario creado correctamente.",
+                usuarioId = usuario.Id,
+                nombreUsuario = usuario.NombreUsuario,
+                rol = usuario.Rol.ToString()
+            });
         }
     }
 }
