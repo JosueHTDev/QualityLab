@@ -1,0 +1,41 @@
+@model List<MuestraResponse>
+@{
+    ViewData["Title"] = "Mis muestras";
+}
+
+<h3 class="mb-4">Mis muestras</h3>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Aún no tienes muestras registradas.</div>
+}
+else
+{
+    <table class="table table-striped table-hover bg-white shadow-sm">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Tipo de producto</th>
+                <th>Fecha de recepción</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var muestra in Model)
+            {
+                <tr>
+                    <td>@muestra.Codigo</td>
+                    <td>@muestra.TipoProducto</td>
+                    <td>@muestra.FechaRecepcion.ToLocalTime().ToString("dd/MM/yyyy")</td>
+                    <td><span class="badge bg-secondary">@muestra.Estado</span></td>
+                    <td>
+                        <a asp-action="Detalle" asp-route-id="@muestra.Id" class="btn btn-sm btn-primary">
+                            Ver detalle
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

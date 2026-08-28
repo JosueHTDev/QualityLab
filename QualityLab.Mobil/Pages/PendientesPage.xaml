@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:QualityLab.Mobil.Models"
+             x:Class="QualityLab.Mobil.Pages.PendientesPage"
+             Title="Pendientes por sincronizar">
+
+    <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="10">
+
+        <Button Grid.Row="0" x:Name="BtnSincronizar" Text="Sincronizar ahora" Clicked="BtnSincronizar_Clicked" />
+
+        <CollectionView Grid.Row="1" x:Name="ListaPendientes">
+            <CollectionView.EmptyView>
+                <Label Text="No hay operaciones pendientes por sincronizar." Style="{StaticResource SubtituloLabel}" Margin="0,30,0,0" HorizontalOptions="Center" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:OperacionPendiente">
+                    <Frame Margin="0,4" Padding="12" CornerRadius="10" BorderColor="{StaticResource Gray200}">
+                        <VerticalStackLayout Spacing="3">
+                            <Label Text="{Binding Tipo}" FontAttributes="Bold" />
+                            <Label Text="{Binding Descripcion}" />
+                            <Label Text="{Binding FechaCreacionLocal, StringFormat='Capturado: {0:dd/MM/yyyy HH:mm}'}"
+                                   Style="{StaticResource SubtituloLabel}" />
+                            <Label Text="{Binding ErrorUltimoIntento, StringFormat='Último error: {0}'}"
+                                   TextColor="{StaticResource ErrorRed}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

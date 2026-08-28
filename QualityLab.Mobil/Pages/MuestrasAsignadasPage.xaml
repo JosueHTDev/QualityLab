@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:QualityLab.Mobil.Models"
+             x:Class="QualityLab.Mobil.Pages.MuestrasAsignadasPage"
+             Title="Mis muestras asignadas">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="16" RowSpacing="10">
+
+        <Label Grid.Row="0" x:Name="LabelUsuario" Style="{StaticResource SubtituloLabel}" />
+
+        <HorizontalStackLayout Grid.Row="1" Spacing="10">
+            <Button Text="Refrescar" Clicked="BtnRefrescar_Clicked" />
+            <Button x:Name="BtnPendientes" Text="Pendientes por sincronizar (0)" Clicked="BtnPendientes_Clicked" BackgroundColor="{StaticResource PrimaryDark}" />
+        </HorizontalStackLayout>
+
+        <RefreshView Grid.Row="2" x:Name="RefreshView" Refreshing="RefreshView_Refreshing">
+            <CollectionView x:Name="ListaMuestras" SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <Label Text="No tienes muestras asignadas por el momento." Style="{StaticResource SubtituloLabel}" Margin="0,30,0,0" HorizontalOptions="Center" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:MuestraResponse">
+                        <Frame Margin="0,4" Padding="14" CornerRadius="10" BorderColor="{StaticResource Gray200}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="MuestraSeleccionada_Tapped" CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Codigo}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding TipoProducto}" />
+                                <Label Text="{Binding Estado}" TextColor="{StaticResource Primary}" FontAttributes="Bold" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Grid.Row="3" Text="Cerrar sesión" Clicked="BtnCerrarSesion_Clicked" BackgroundColor="{StaticResource ErrorRed}" />
+
+    </Grid>
+</ContentPage>

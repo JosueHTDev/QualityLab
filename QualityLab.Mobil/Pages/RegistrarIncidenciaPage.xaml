@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QualityLab.Mobil.Pages.RegistrarIncidenciaPage"
+             Title="Registrar incidencia">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+
+            <Label x:Name="LabelMuestra" Style="{StaticResource SubtituloLabel}" />
+
+            <Label Text="Descripción de la incidencia" />
+            <Editor x:Name="EditorDescripcion" HeightRequest="140" Placeholder="Ej. La muestra presenta daño en el empaque..." />
+
+            <Button Text="Guardar incidencia" Clicked="BtnGuardar_Clicked" BackgroundColor="{StaticResource ErrorRed}" Margin="0,10,0,0" />
+
+            <Label x:Name="LabelEstadoEnvio" Style="{StaticResource SubtituloLabel}" IsVisible="False" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

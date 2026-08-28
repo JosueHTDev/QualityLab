@@ -1,0 +1,72 @@
+@model MuestraDetalleViewModel
+@{
+    ViewData["Title"] = $"Muestra {Model.Muestra.Codigo}";
+}
+
+<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">&larr; Volver a mis muestras</a>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="card-title">Muestra @Model.Muestra.Codigo</h4>
+        <p class="mb-1"><strong>Tipo de producto:</strong> @Model.Muestra.TipoProducto</p>
+        <p class="mb-1"><strong>Fecha de recepción:</strong> @Model.Muestra.FechaRecepcion.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+        <p class="mb-1">
+            <strong>Estado actual:</strong>
+            <span class="badge bg-primary">@Model.Estado.Estado</span>
+        </p>
+
+        @if (Model.Estado.TieneCertificado)
+        {
+            <a asp-action="DescargarCertificado" asp-route-id="@Model.Muestra.Id" class="btn btn-success mt-2">
+                Descargar certificado
+            </a>
+        }
+        else
+        {
+            <p class="text-muted mt-2 mb-0">El certificado aún no ha sido emitido.</p>
+        }
+    </div>
+</div>
+
+<h5>Resultados</h5>
+@if (!Model.Resultados.Any())
+{
+    <div class="alert alert-info">
+        Los resultados aún no están disponibles. Se publicarán aquí cuando el análisis finalice.
+    </div>
+}
+else
+{
+    <table class="table table-bordered bg-white shadow-sm">
+        <thead>
+            <tr>
+                <th>Parámetro</th>
+                <th>Valor obtenido</th>
+                <th>Valor de referencia</th>
+                <th>Unidad</th>
+                <th>Conformidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var resultado in Model.Resultados)
+            {
+                <tr>
+                    <td>@resultado.Parametro</td>
+                    <td>@resultado.ValorObtenido</td>
+                    <td>@resultado.ValorReferencia</td>
+                    <td>@resultado.Unidad</td>
+                    <td>
+                        @if (resultado.Conforme)
+                        {
+                            <span class="badge bg-success badge-conforme">Conforme</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger badge-conforme">No conforme</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

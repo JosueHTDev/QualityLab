@@ -1,8 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34309.116
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12120.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityLab.API", "QualityLab.API\QualityLab.API.csproj", "{B1A1D1A1-0001-4C1C-9B1A-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityLab.Web", "QualityLab.Web\QualityLab.Web.csproj", "{921D3AD7-38AE-08EE-A23E-70FFFFB2F5C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityLab.WinForms", "QualityLab.WinForms\QualityLab.WinForms.csproj", "{ABDFA93E-BFCD-1E43-AE23-BE4092FD5F68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QualityLab.Mobil", "QualityLab.Mobil\QualityLab.Mobil.csproj", "{72476849-1CC6-464D-9265-C7A13188AD25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,8 +20,23 @@ Global
 		{B1A1D1A1-0001-4C1C-9B1A-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1A1D1A1-0001-4C1C-9B1A-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1A1D1A1-0001-4C1C-9B1A-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921D3AD7-38AE-08EE-A23E-70FFFFB2F5C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921D3AD7-38AE-08EE-A23E-70FFFFB2F5C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921D3AD7-38AE-08EE-A23E-70FFFFB2F5C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921D3AD7-38AE-08EE-A23E-70FFFFB2F5C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABDFA93E-BFCD-1E43-AE23-BE4092FD5F68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABDFA93E-BFCD-1E43-AE23-BE4092FD5F68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABDFA93E-BFCD-1E43-AE23-BE4092FD5F68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABDFA93E-BFCD-1E43-AE23-BE4092FD5F68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72476849-1CC6-464D-9265-C7A13188AD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72476849-1CC6-464D-9265-C7A13188AD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72476849-1CC6-464D-9265-C7A13188AD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72476849-1CC6-464D-9265-C7A13188AD25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {90DBF8D0-9009-4C66-B9B8-279514976243}
 	EndGlobalSection
 EndGlobal
